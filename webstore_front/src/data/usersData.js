@@ -1,0 +1,57 @@
+﻿export const users = [
+    {
+        id: 1,
+        username: 'admin',
+        email: 'admin@admin.com',
+        image: '',
+        role: 'admin',
+        firstName: 'admin',
+        lastName: 'admin',
+    },
+    {
+        id: 2,
+        username: 'jdoe',
+        email: 'jdoe@example.com',
+        image: '',
+        role: 'user',
+        firstName: 'John',
+        lastName: 'Doe',
+    },
+    {
+        id: 3,
+        username: 'asmith',
+        email: 'asmith@example.com',
+        image: '',
+        role: 'user',
+        firstName: 'Alice',
+        lastName: 'Smith',
+    },
+    {
+        id: 4,
+        username: 'bwayne',
+        email: 'bwayne@example.com',
+        image: '',
+        role: 'user',
+        firstName: 'Bruce',
+        lastName: 'Wayne',
+    },
+    {
+        id: 5,
+        username: 'ckent',
+        email: 'ckent@example.com',
+        image: '',
+        role: 'user',
+        firstName: 'Clark',
+        lastName: 'Kent',
+    },
+    {
+        id: 6,
+        username: 'pparker',
+        email: 'pparker@example.com',
+        image: '',
+        role: 'user',
+        firstName: 'Peter',
+        lastName: 'Parker',
+    }
+    
+];

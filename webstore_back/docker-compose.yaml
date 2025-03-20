@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: npr321
+      POSTGRES_PASSWORD: qwerty
+      POSTGRES_DB: dashboard
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dashboard_network
+
+  webapi:
+    image: potapchuk22/dashboard-npr321-api
+    ports:
+      - "5001:8080"
+    depends_on:
+      - postgres
+    volumes:
+      - /volumes/dashboard/images/user:/app/wwwroot/images/user
+      - /volumes/dashboard/templates:/app/wwwroot/templates
+    environment:
+      ConnectionStrings__PostgreSqlUbuntu: "User ID=npr321;Password=qwerty;Host=postgres;Port=5432;Database=dashboard;"
+    networks:
+      - dashboard_network
+
+networks:
+  dashboard_network:
+
+volumes:
+  postgres_data:

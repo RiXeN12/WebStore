@@ -1,0 +1,286 @@
+﻿.category-list-container {
+    padding: 40px; /* Збільшено відступи в контейнері */
+    max-width: 1400px; /* Збільшено максимальну ширину контейнера */
+    margin: 0 auto;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.product-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px; /* Збільшено відступ знизу */
+    padding: 0 16px; /* Збільшено відступи по боках */
+}
+
+.product-title {
+    font-size: 28px; /* Збільшено розмір шрифта */
+    font-weight: 700; /* Збільшено вагу шрифта */
+    color: #333;
+}
+
+.header-controls {
+    display: flex;
+    gap: 24px; /* Збільшено відстань між елементами */
+    align-items: center;
+}
+
+.search-container {
+    position: relative;
+}
+
+.search-input {
+    padding: 14px 20px; /* Збільшено відступи всередині input */
+    border: 2px solid #e5e7eb;
+    border-radius: 8px; /* Збільшено радіус скруглення */
+    width: 350px; /* Збільшена ширина input */
+    font-size: 16px; /* Збільшено розмір шрифта */
+    background-color: #f9fafb;
+    color: #1f2937;
+}
+
+.search-input::placeholder {
+    color: #9ca3af;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #9333ea;
+    background-color: white;
+    color: #1f2937;
+}
+
+.search-icon {
+    position: absolute;
+    right: 16px; /* Збільшено відступ від правого краю */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+}
+
+.add-button {
+    background-color: #9333ea;
+    color: white;
+    padding: 14px;
+    border-radius: 8px; /* Збільшено радіус скруглення */
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+    font-size: 18px; /* Збільшено розмір шрифта */
+}
+
+.add-button:hover {
+    background-color: #7e22ce;
+}
+
+.table-container {
+    background-color: white;
+    border-radius: 12px; /* Збільшено радіус скруглення */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-top: 32px; /* Збільшено відступ зверху */
+    width: 100%;
+}
+
+.products-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px; /* Збільшено розмір шрифта в таблиці */
+    table-layout: fixed;
+}
+
+.products-table th, .products-table td {
+    padding: 16px 24px; /* Збільшено відступи в клітинках таблиці */
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+    color: #1f2937;
+    text-align: left;
+}
+
+.products-table th {
+    font-weight: 700; /* Збільшено вагу шрифта для заголовків */
+    background-color: #f9fafb;
+}
+
+.products-table tr:hover {
+    background-color: #f3f4f6; /* Трохи змінено колір для наведення */
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 16px; /* Збільшено відстань між елементами */
+}
+
+.category-tag {
+    display: inline-block;
+    padding: 8px 16px; /* Збільшено відступи всередині категорії */
+    border-radius: 20px; /* Збільшено радіус скруглення */
+    font-size: 14px; /* Збільшено розмір шрифта */
+    font-weight: 500;
+    text-align: center;
+    min-width: 120px; /* Збільшена мінімальна ширина */
+}
+
+.category-shoes {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+
+
+.category-clothes {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.category-accessories {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 16px; /* Збільшено відстань між кнопками */
+    justify-content: flex-end;
+}
+
+.edit-button, .delete-button {
+    padding: 8px; /* Збільшено відступи для кнопок */
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-radius: 8px; /* Збільшено радіус скруглення */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 16px; /* Збільшено розмір шрифта */
+}
+
+.edit-button {
+    color: #9333ea;
+}
+
+.delete-button {
+    color: #dc2626;
+}
+
+.edit-button:hover {
+    background-color: #f3e8ff;
+}
+
+.delete-button:hover {
+    background-color: #fee2e2;
+}
+
+@media screen and (max-width: 1400px) {
+    .table-container {
+        overflow-x: auto;
+    }
+}
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: modal-appear 0.3s ease;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-close:hover {
+    color: #333;
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.modal-content p {
+    color: #555;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.confirm-button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.cancel-button {
+    background-color: #95a5a6;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.confirm-button:hover {
+    background-color: #c0392b;
+}
+
+.cancel-button:hover {
+    background-color: #7f8c8d;
+}
+
+@keyframes modal-appear {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+
+
+
+
+
+

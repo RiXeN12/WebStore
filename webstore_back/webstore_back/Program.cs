@@ -1,30 +1,30 @@
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
-using webstore_back.DAL.Repositories.RoleRepository;
-using webstore_back.DAL.Repositories.UserRepository;
-using webstore_back.DAL.Data.Initializer;
-using webstore_back.DAL.Data;
-using webstore_back.DAL;
-using webstore_back.DAL.Models.Identity;
-using webstore_back.BLL.Services.AccountService;
-using webstore_back.BLL.Services.MailService;
-using webstore_back.BLL.Services.JwtService;
-using webstore_back.BLL.Services.RoleService;
 using webstore_back.BLL.Middlewares;
+using webstore_back.BLL.Services.AccountService;
 using webstore_back.BLL.Services.CategoryService;
 using webstore_back.BLL.Services.ClothingItemService;
 using webstore_back.BLL.Services.ImageService;
-using webstore_back.BLL.Services.UserService;
-using webstore_back.DAL.Repositories.CategoryRepository;
-using webstore_back.DAL.Repositories.ManufacturerRepository;
+using webstore_back.BLL.Services.JwtService;
+using webstore_back.BLL.Services.MailService;
 using webstore_back.BLL.Services.ManufacturerService;
+using webstore_back.BLL.Services.RoleService;
+using webstore_back.BLL.Services.UserService;
+using webstore_back.DAL;
+using webstore_back.DAL.Data;
+using webstore_back.DAL.Data.Initializer;
+using webstore_back.DAL.Models.Identity;
+using webstore_back.DAL.Repositories.CategoryRepository;
 using webstore_back.DAL.Repositories.ClothingItemRepository;
 using webstore_back.DAL.Repositories.Common;
+using webstore_back.DAL.Repositories.ManufacturerRepository;
+using webstore_back.DAL.Repositories.RoleRepository;
+using webstore_back.DAL.Repositories.UserRepository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +32,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     // options.UseNpgsql("name=Default");
-    options.UseNpgsql("name=DefaultLocal");
-    // options.UseNpgsql("name=PostgreSqlUbuntu");
+    // options.UseNpgsql("name=DefaultLocal");
+    options.UseNpgsql("name=PostgresDocker");
 });
 
 // Add CORS
@@ -42,31 +42,30 @@ var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: myAllowSpecificOrigins, policy =>
-    {
-        policy.WithOrigins("http://localhost:5173")
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-    });
+        policy.SetIsOriginAllowed(origin => true)
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials());
 });
 // Add identity
 builder.Services.AddIdentity<User, Role>(options =>
-{
-    options.Password.RequireDigit = false;
-    options.Password.RequireLowercase = false;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequireUppercase = false;
-    options.Password.RequiredLength = Settings.PasswordLength;
-    options.Password.RequiredUniqueChars = 1;
-})
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = Settings.PasswordLength;
+        options.Password.RequiredUniqueChars = 1;
+    })
     .AddDefaultTokenProviders()
     .AddEntityFrameworkStores<AppDbContext>();
 
 // Add authentication
 builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -75,7 +74,8 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:key"])),
+            IssuerSigningKey =
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:key"])),
             ValidIssuer = builder.Configuration["AuthSettings:issuer"],
             ValidAudience = builder.Configuration["AuthSettings:audience"]
         };
@@ -165,7 +165,7 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/files"
 });
 
-if(!File.Exists(Path.Combine(builder.Environment.WebRootPath, "images")))
+if (!File.Exists(Path.Combine(builder.Environment.WebRootPath, "images")))
 {
     Directory.CreateDirectory(Path.Combine(builder.Environment.WebRootPath, "images"));
 }

@@ -4,30 +4,39 @@ services:
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_USER: npr321
-      POSTGRES_PASSWORD: qwerty
-      POSTGRES_DB: dashboard
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - dashboard_network
-
+  
   webapi:
-    image: potapchuk22/dashboard-npr321-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rixen1221/webstore_back:latest
     ports:
       - "5001:8080"
     depends_on:
       - postgres
     volumes:
-      - /volumes/dashboard/images/user:/app/wwwroot/images/user
-      - /volumes/dashboard/templates:/app/wwwroot/templates
+      - ./wwwroot/images:/app/wwwroot/images
+      - ./wwwroot/templates:/app/wwwroot/templates
+      - ./:/source
     environment:
-      ConnectionStrings__PostgreSqlUbuntu: "User ID=npr321;Password=qwerty;Host=postgres;Port=5432;Database=dashboard;"
+      ConnectionStrings__PostgresDocker: "Server=postgres;Port=5432;Database=postgres;User Id=postgres;Password=postgres;"
+      ASPNETCORE_URLS: "http://+:8080"
+      ASPNETCORE_ENVIRONMENT: "Development"
     networks:
       - dashboard_network
 
 networks:
   dashboard_network:
+    driver: bridge
 
 volumes:
   postgres_data:

@@ -1,8 +1,10 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingCart, Check } from 'lucide-react';
-import { products } from '../../data/productsData';
 import { useShopping } from '../../context/ShoppingContext';
+import { useSelector, useDispatch } from 'react-redux';
+import { useActions } from '../../hooks/useActions';
+import productImage from '../../hooks/productImage';
 
 const FavoriteProducts = () => {
     const {
@@ -16,6 +18,14 @@ const FavoriteProducts = () => {
     const [selectedItems, setSelectedItems] = useState([]);
     const [isSelectMode, setIsSelectMode] = useState(false);
 
+    const dispatch = useDispatch();
+    const { getClothingItems } = useActions();
+    const { clothingItemList } = useSelector(state => state.product);
+
+    useEffect(() => {
+        getClothingItems(); // Завантаження продуктів з бази
+    }, []);
+
     const toggleFavorite = (productId) => {
         if (isSelectMode) {
             toggleSelect(productId);
@@ -26,13 +36,11 @@ const FavoriteProducts = () => {
     };
 
     const toggleSelect = (productId) => {
-        setSelectedItems(prevSelected => {
-            if (prevSelected.includes(productId)) {
-                return prevSelected.filter(id => id !== productId);
-            } else {
-                return [...prevSelected, productId];
-            }
-        });
+        setSelectedItems(prevSelected =>
+            prevSelected.includes(productId)
+                ? prevSelected.filter(id => id !== productId)
+                : [...prevSelected, productId]
+        );
     };
 
     const toggleSelectMode = () => {
@@ -41,7 +49,9 @@ const FavoriteProducts = () => {
     };
 
     const selectAll = () => {
-        const favoriteProducts = products.filter(product => favoriteItems.includes(product.id));
+        const favoriteProducts = clothingItemList.filter(product =>
+            favoriteItems.includes(product.id)
+        );
         setSelectedItems(favoriteProducts.map(product => product.id));
     };
 
@@ -51,11 +61,11 @@ const FavoriteProducts = () => {
                 addToCart(productId);
             }
         });
-        
+
         selectedItems.forEach(productId => {
             removeFromFavorites(productId);
         });
-        
+
         setSelectedItems([]);
         setIsSelectMode(false);
     };
@@ -64,7 +74,9 @@ const FavoriteProducts = () => {
         return !isInCart(productId);
     };
 
-    const favoriteProducts = products.filter(product => favoriteItems.includes(product.id));
+    const favoriteProducts = clothingItemList.filter(product =>
+        favoriteItems.includes(product.id)
+    );
 
     return (
         <div className="container py-4">
@@ -113,11 +125,7 @@ const FavoriteProducts = () => {
                     {favoriteProducts.map(product => (
                         <div key={product.id} className="col-6 col-md-4 col-lg-3">
                             <div
-                                className={`card h-100 border-0 ${
-                                    isSelectMode ? 'cursor-pointer' : ''
-                                } ${
-                                    selectedItems.includes(product.id) ? 'bg-light' : ''
-                                }`}
+                                className={`card h-100 border-0 ${isSelectMode ? 'cursor-pointer' : ''} ${selectedItems.includes(product.id) ? 'bg-light' : ''}`}
                                 onClick={() => isSelectMode && toggleSelect(product.id)}
                             >
                                 <div className="position-relative">
@@ -126,17 +134,15 @@ const FavoriteProducts = () => {
                                         onClick={(e) => isSelectMode && e.preventDefault()}
                                     >
                                         <img
-                                            src={product.image}
-                                            alt={product.title}
+                                            src={productImage(product.images[0]?.filePath)}
+                                            alt={product.name}
                                             className="card-img-top"
                                             style={{ aspectRatio: '3/4', objectFit: 'cover' }}
                                         />
                                     </Link>
                                     {isSelectMode ? (
                                         <div
-                                            className={`position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center ${
-                                                selectedItems.includes(product.id) ? 'bg-dark' : 'bg-light'
-                                            }`}
+                                            className={`position-absolute top-0 end-0 m-2 rounded-circle d-flex align-items-center justify-content-center ${selectedItems.includes(product.id) ? 'bg-dark' : 'bg-light'}`}
                                             style={{ width: '32px', height: '32px', border: '2px solid currentColor' }}
                                         >
                                             {selectedItems.includes(product.id) && (
@@ -152,16 +158,12 @@ const FavoriteProducts = () => {
                                             }}
                                             disabled={!canAddToFavorites(product.id)}
                                         >
-                                            <Heart
-                                                size={20}
-                                                fill="#dc3545"
-                                                color="#dc3545"
-                                            />
+                                            <Heart size={20} fill="#dc3545" color="#dc3545" />
                                         </button>
                                     )}
                                 </div>
                                 <div className="card-body px-0 pt-3">
-                                    <h5 className="card-title h6">{product.title}</h5>
+                                    <h5 className="card-title h6">{product.name}</h5>
                                     <p className="card-text">
                                         <span className="fw-bold">{product.price} грн</span>
                                     </p>

@@ -15,9 +15,6 @@ services:
       - dashboard_network
   
   webapi:
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: rixen1221/webstore_back:latest
     ports:
       - "5001:8080"
@@ -26,7 +23,6 @@ services:
     volumes:
       - ./wwwroot/images:/app/wwwroot/images
       - ./wwwroot/templates:/app/wwwroot/templates
-      - ./:/source
     environment:
       ConnectionStrings__PostgresDocker: "Server=postgres;Port=5432;Database=postgres;User Id=postgres;Password=postgres;"
       ASPNETCORE_URLS: "http://+:8080"

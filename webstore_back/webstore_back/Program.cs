@@ -176,6 +176,17 @@ app.UseStaticFiles(new StaticFileOptions
     RequestPath = "/images"
 });
 
+app.Use(async (context, next) =>
+{
+    if (!context.Request.IsHttps)
+    {
+        var withHttps = "https://" + context.Request.Host + context.Request.Path + context.Request.QueryString;
+        context.Response.Redirect(withHttps, permanent: true);
+        return;
+    }
+    await next();
+});
+
 app.MapControllers();
 
 app.SeedData();

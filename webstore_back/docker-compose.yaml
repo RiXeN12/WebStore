@@ -13,7 +13,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - dashboard_network
-  
+
   webapi:
     image: rixen1221/webstore_back:latest
     ports:
@@ -29,6 +29,15 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
     networks:
       - dashboard_network
+
+  frontend:
+    image: rixen1221/webstore_front:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - dashboard_network
+    environment:
+      - API_URL=http://webapi:8080
 
 networks:
   dashboard_network:
